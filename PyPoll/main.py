@@ -10,7 +10,7 @@
 #import modules
 import os
 
-# Module for reading CSV files
+#module for reading CSV files
 import csv
 
 
@@ -21,17 +21,17 @@ vote_total = 0
 
 votes_per_candidate = {}
 
-# open up election_data
+#open up election_data
 with open(election_data_csv, newline='') as csvfile:
 
-    # CSV reader specifies delimiter and variable that holds contents
+    #CSV reader specifies delimiter and variable that holds contents
     csvreader = csv.reader(csvfile, delimiter=',')
 
-    # Read the header row first
+    # read the header row first
     csv_header = next(csvreader)
     # print(f"CSV Header: {csv_header}")
 
-    # Read each row of data after the header
+    #read each row of data after the header
     for row in csvreader:
         vote_total += 1
         if row[2] not in votes_per_candidate:
@@ -41,7 +41,7 @@ with open(election_data_csv, newline='') as csvfile:
         
         
 
-
+#output to terminal
 print("Election Results")
 print("-------------------------")
 print("Total Votes: " + str(vote_total))
@@ -56,7 +56,7 @@ winner = max(votes_per_candidate, key=votes_per_candidate.get)
 
 print(f"Winner: {winner}")
 
-# now write this to an output file
+#output to text file
 
 f = open("election_results.txt", "w")
 f.write("Election Results")
