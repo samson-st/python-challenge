@@ -8,38 +8,71 @@
 
 
 #import modules
-#https://docs.python.org/3/library/collections.html
 import os
+
+# Module for reading CSV files
 import csv
-import collections
-from collections import Counter
 
-#input file for data analysis
-election_data = os.path.join("Resources/", "election_data.csv")
-#output file
-text_path = os.path.join("analysis", "results.txt")
 
-#declare variables
-chosen_candidates = []
-votes_per_candidate = []
+election_data_csv = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources', 'election_data.csv')
 
-# Open and read csv
-with open(election_data, newline="") as csvfile:
+#total rows
+vote_total = 0
 
-    csv_reader = csv.reader(csvfile, delimiter=",")
+votes_per_candidate = {}
 
-    csv_header = next(csvfile)
+# open up election_data
+with open(election_data_csv, newline='') as csvfile:
 
-    #read through rows
-    for row in csv_reader:
+    # CSV reader specifies delimiter and variable that holds contents
+    csvreader = csv.reader(csvfile, delimiter=',')
 
-        chosen_candidates.append(row[2])
+    # Read the header row first
+    csv_header = next(csvreader)
+    # print(f"CSV Header: {csv_header}")
 
-    sorted_candidates = sorted(chosen_candidates)
-    arrange_candidates = sorted_candidates
+    # Read each row of data after the header
+    for row in csvreader:
+        vote_total += 1
+        if row[2] not in votes_per_candidate:
+            votes_per_candidate[row[2]] = 1
+        else:
+            votes_per_candidate[row[2]] += 1   
+        
+        
 
-    #count votes per candidate
-    candidate_count = Counter (arrange_candidates)
+
+print("Election Results")
+print("-------------------------")
+print("Total Votes: " + str(vote_total))
+print("-------------------------")
+
+for candidate, votes in votes_per_candidate.items():
+    print(candidate + ": " + "{:.3%}".format(votes/vote_total) + "   (" +  str(votes) + ")")
     
+print("-------------------------") 
 
+winner = max(votes_per_candidate, key=votes_per_candidate.get)
 
+print(f"Winner: {winner}")
+
+# now write this to an output file
+
+f = open("election_results.txt", "w")
+f.write("Election Results")
+f.write('\n')
+f.write("-------------------------")
+f.write('\n')
+f.write("Total Votes: " + str(vote_total))
+f.write('\n')
+f.write("-------------------------")
+f.write('\n')
+
+for candidate, votes in votes_per_candidate.items():
+    f.write(candidate + ": " + "{:.3%}".format(votes/vote_total) + "   (" +  str(votes) + ")")
+    f.write('\n')
+  
+f.write("-------------------------") 
+f.write('\n')
+f.write(f"Winner: {winner}")
+f.write('\n')
